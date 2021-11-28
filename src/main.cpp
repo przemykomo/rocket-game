@@ -111,8 +111,8 @@ int main(int argc, const char **argv) {
             for (Asteroid& asteroid : asteroids) {
                 asteroid.rec.y += std::min(ticks/200.0, 20.0) + asteroid.additionalSpeed;
                 asteroid.rotation += asteroid.rotationSpeed;
-                //if (CheckCollisionRecs(asteroid.rec, player)) {
-                if (CheckCollisionCircleRec({asteroid.rec.x, asteroid.rec.y}, asteroid.rec.width / 2.0f, player)) {
+
+                if (CheckCollisionCircleRec({asteroid.rec.x, asteroid.rec.y}, 20.0f, player)) {
                     dead = true;
                 }
             }
