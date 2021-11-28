@@ -55,7 +55,7 @@ inc_dir = include_directories(
 )
 
 sources = files(
-  'src/main.c',
+  'src/main.cpp',
 )
 
 executable('raylib-meson',
