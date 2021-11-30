@@ -1,11 +1,12 @@
 #include "GameScene.hpp"
+#include "Scene.hpp"
 #include "raylib.h"
 #include <algorithm>
 #include <random>
 #include <vector>
 
-GameScene::GameScene()
-    : width(GetScreenWidth()), height(GetScreenHeight()),
+GameScene::GameScene(bool &pop, Scene *&toPush)
+    : Scene(pop, toPush), width(GetScreenWidth()), height(GetScreenHeight()),
       centerPos(250 - PLAYER_WIDTH / 2),
       textureAtlas(LoadTexture("res/atlas.png")), r(), rngEngine(r()),
       horizontalDist(0, width), verticalDist(0, height),
@@ -39,6 +40,10 @@ void GameScene::frame() {
         } else {
             pause = !pause;
         }
+    }
+
+    if (pause && IsKeyPressed(KEY_Q)) {
+        exitScene();
     }
 
     if (!pause && !dead) {

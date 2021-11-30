@@ -56,6 +56,7 @@ inc_dir = include_directories(
 
 sources = files(
   'src/main.cpp',
+  'src/Scene.cpp',
   'src/GameScene.cpp'
 )
 

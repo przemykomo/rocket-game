@@ -1,4 +1,5 @@
 #pragma once
+#include "Scene.hpp"
 #include "raylib.h"
 #include <algorithm>
 #include <random>
@@ -17,7 +18,7 @@ struct Asteroid {
 
 enum Direction { LEFT = -1, NONE = 0, RIGHT = 1 };
 
-class GameScene {
+class GameScene : public Scene {
   private:
     const int width;
     const int height;
@@ -44,6 +45,6 @@ class GameScene {
     int asteroidCooldown;
 
   public:
-    GameScene();
-    void frame();
+    GameScene(bool &pop, Scene *&toPush);
+    void frame() override;
 };

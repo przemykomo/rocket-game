@@ -1,15 +1,29 @@
-#include "raylib.h"
 #include "GameScene.hpp"
+#include "Scene.hpp"
+#include "raylib.h"
+#include <memory>
+#include <stack>
 
 int main(int argc, const char **argv) {
 
     InitWindow(500, 800, "Flying rocket game");
     SetTargetFPS(60);
 
-    GameScene gameScene{};
+    bool pop = false;
+    Scene *toPush = nullptr;
+    std::stack<std::unique_ptr<Scene>> sceneStack{};
+    sceneStack.emplace(new GameScene{pop, toPush});
 
-    while (!WindowShouldClose()) {
-        gameScene.frame();
+    while (!WindowShouldClose() && !sceneStack.empty()) {
+        sceneStack.top()->frame();
+        if (pop) {
+            sceneStack.pop();
+            pop = false;
+        }
+        if (toPush != nullptr) {
+            sceneStack.emplace(toPush);
+            toPush = nullptr;
+        }
     }
 
     CloseWindow();
