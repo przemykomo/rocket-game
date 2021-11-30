@@ -24,6 +24,10 @@ GameScene::GameScene(bool &pop, Scene *&toPush)
     }
 }
 
+GameScene::~GameScene() {
+    UnloadTexture(textureAtlas);
+}
+
 void GameScene::frame() {
     BeginDrawing();
     ClearBackground(BLACK);

@@ -1,4 +1,5 @@
 #include "GameScene.hpp"
+#include "MainMenuScene.hpp"
 #include "Scene.hpp"
 #include "raylib.h"
 #include <memory>
@@ -12,7 +13,7 @@ int main(int argc, const char **argv) {
     bool pop = false;
     Scene *toPush = nullptr;
     std::stack<std::unique_ptr<Scene>> sceneStack{};
-    sceneStack.emplace(new GameScene{pop, toPush});
+    sceneStack.emplace(new MainMenuScene{pop, toPush});
 
     while (!WindowShouldClose() && !sceneStack.empty()) {
         sceneStack.top()->frame();

@@ -47,4 +47,5 @@ class GameScene : public Scene {
   public:
     GameScene(bool &pop, Scene *&toPush);
     void frame() override;
+    ~GameScene() override;
 };
