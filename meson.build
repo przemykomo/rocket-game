@@ -58,7 +58,8 @@ sources = files(
   'src/main.cpp',
   'src/Scene.cpp',
   'src/GameScene.cpp',
-  'src/MainMenuScene.cpp'
+  'src/MainMenuScene.cpp',
+  'src/Button.cpp'
 )
 
 executable('raylib-meson',

@@ -1,4 +1,4 @@
-#include "GameScene.hpp"
+#include "GameProperties.hpp"
 #include "MainMenuScene.hpp"
 #include "Scene.hpp"
 #include "raylib.h"
@@ -9,22 +9,22 @@ int main(int argc, const char **argv) {
 
     InitWindow(500, 800, "Flying rocket game");
     SetTargetFPS(60);
+    SetExitKey(KEY_NULL);
 
     {
-        bool pop = false;
-        Scene *toPush = nullptr;
+        GameProperties gameProperties;
         std::stack<std::unique_ptr<Scene>> sceneStack{};
-        sceneStack.emplace(new MainMenuScene{pop, toPush});
+        sceneStack.emplace(new MainMenuScene{gameProperties});
 
-        while (!WindowShouldClose() && !sceneStack.empty()) {
+        while (!WindowShouldClose() && !sceneStack.empty() && !gameProperties.shouldClose) {
             sceneStack.top()->frame();
-            if (pop) {
+            if (gameProperties.pop) {
                 sceneStack.pop();
-                pop = false;
+                gameProperties.pop = false;
             }
-            if (toPush != nullptr) {
-                sceneStack.emplace(toPush);
-                toPush = nullptr;
+            if (gameProperties.toPush != nullptr) {
+                sceneStack.emplace(gameProperties.toPush);
+                gameProperties.toPush = nullptr;
             }
         }
     }

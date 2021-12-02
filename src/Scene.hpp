@@ -1,17 +1,18 @@
 #pragma once
+#include "GameProperties.hpp"
 #include <functional>
 
 class Scene {
   private:
-    bool &pop;
-    Scene *&toPush;
+    GameProperties &gameProperties;
 
   protected:
-    Scene(bool &pop, Scene *&toPush);
+    Scene(GameProperties &gameProperties);
 
   public:
     virtual void frame() = 0;
     virtual ~Scene() = default;
     void exitScene();
-    void openScene(std::function<Scene *(bool &, Scene *&)> constructor);
+    void openScene(std::function<Scene *(GameProperties &)> constructor);
+    void closeGame();
 };

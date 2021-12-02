@@ -1,21 +1,14 @@
 #pragma once
+#include "Button.hpp"
+#include "GameProperties.hpp"
 #include "Scene.hpp"
-#include "raylib.h"
-#include <string>
 #include <vector>
-
-struct Button {
-    std::string text;
-    Rectangle rec;
-    std::function<void(void)> onClick;
-    void frame();
-};
 
 class MainMenuScene : public Scene {
   private:
     std::vector<Button> buttons;
 
   public:
-    MainMenuScene(bool &pop, Scene *&toPush);
+    MainMenuScene(GameProperties &gameProperties);
     void frame() override;
 };

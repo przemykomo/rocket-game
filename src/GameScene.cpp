@@ -1,12 +1,13 @@
 #include "GameScene.hpp"
+#include "GameProperties.hpp"
 #include "Scene.hpp"
 #include "raylib.h"
 #include <algorithm>
 #include <random>
 #include <vector>
 
-GameScene::GameScene(bool &pop, Scene *&toPush)
-    : Scene(pop, toPush), width(GetScreenWidth()), height(GetScreenHeight()),
+GameScene::GameScene(GameProperties &gameProperties)
+    : Scene(gameProperties), width(GetScreenWidth()), height(GetScreenHeight()),
       centerPos(250 - PLAYER_WIDTH / 2),
       textureAtlas(LoadTexture("res/atlas.png")), r(), rngEngine(r()),
       horizontalDist(0, width), verticalDist(0, height),
@@ -17,15 +18,36 @@ GameScene::GameScene(bool &pop, Scene *&toPush)
       stars(
           static_cast<std::vector<Vector2>::size_type>(width * height / 4000)),
       asteroids(), pause(false), dead(false), movement(NONE), ticks(0),
-      asteroidCooldown(asteroidCooldownDist(rngEngine)) {
+      asteroidCooldown(asteroidCooldownDist(rngEngine)),
+      unpauseButton{
+          "Unpause",
+          {width / 5.0f, height * 1.75f / 3.0f, width * 3 / 5.0f, width / 5.0f},
+          [this]() { pause = false; }},
+      playAgainButton{
+          "Play again",
+          {width / 5.0f, height * 1.75f / 3.0f, width * 3 / 5.0f, width / 5.0f},
+          [this]() { restartGame(); }},
+      exitButton{
+          "Exit",
+          {width / 5.0f, height * 2.25f / 3.0f, width * 3 / 5.0f, width / 5.0f},
+          [this]() { exitScene(); }}
+{
     for (Vector2 &star : stars) {
         star.x = horizontalDist(rngEngine);
         star.y = verticalDist(rngEngine);
     }
 }
 
-GameScene::~GameScene() {
-    UnloadTexture(textureAtlas);
+GameScene::~GameScene() { UnloadTexture(textureAtlas); }
+
+void GameScene::restartGame() {
+    pause = false;
+    dead = false;
+    movement = NONE;
+    ticks = 0;
+    asteroidCooldown = asteroidCooldownDist(rngEngine);
+    asteroids.clear();
+    player.x = (width - PLAYER_WIDTH) / 2.0f;
 }
 
 void GameScene::frame() {
@@ -33,21 +55,7 @@ void GameScene::frame() {
     ClearBackground(BLACK);
 
     if (IsKeyPressed(KEY_SPACE)) {
-        if (dead) {
-            pause = false;
-            dead = false;
-            movement = NONE;
-            ticks = 0;
-            asteroidCooldown = asteroidCooldownDist(rngEngine);
-            asteroids.clear();
-            player.x = (width - PLAYER_WIDTH) / 2.0f;
-        } else {
-            pause = !pause;
-        }
-    }
-
-    if (pause && IsKeyPressed(KEY_Q)) {
-        exitScene();
+        pause = !pause;
     }
 
     if (!pause && !dead) {
@@ -123,10 +131,14 @@ void GameScene::frame() {
 
     if (dead) {
         DrawText("YOU DIED", (width - MeasureText("YOU DIED", 36)) / 2,
-                 height / 2, 36, MAROON);
+                 height / 4, 36, MAROON);
+        playAgainButton.frame();
+        exitButton.frame();
     } else if (pause) {
-        DrawText("PAUSED", (width - MeasureText("PAUSED", 36)) / 2, height / 2,
-                 36, GRAY);
+        DrawText("PAUSED", (width - MeasureText("PAUSED", 36)) / 2,
+                 height / 4, 36, WHITE);
+        unpauseButton.frame();
+        exitButton.frame();
     }
 
     EndDrawing();

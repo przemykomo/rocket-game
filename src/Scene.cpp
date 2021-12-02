@@ -1,11 +1,16 @@
 #include "Scene.hpp"
+#include "GameProperties.hpp"
 
-Scene::Scene(bool &pop, Scene *&toPush) : pop{pop}, toPush{toPush} {}
+Scene::Scene(GameProperties &gameProperties) : gameProperties(gameProperties) {}
 
-void Scene::exitScene() { pop = true; }
+void Scene::exitScene() { gameProperties.pop = true; }
 
-void Scene::openScene(std::function<Scene *(bool &, Scene *&)> constructor) {
-    if (toPush == nullptr) {
-        toPush = constructor(pop, toPush);
+void Scene::openScene(std::function<Scene *(GameProperties &)> constructor) {
+    if (gameProperties.toPush == nullptr) {
+        gameProperties.toPush = constructor(gameProperties);
     }
+}
+
+void Scene::closeGame() {
+    gameProperties.shouldClose = true;
 }

@@ -1,4 +1,6 @@
 #pragma once
+#include "Button.hpp"
+#include "GameProperties.hpp"
 #include "Scene.hpp"
 #include "raylib.h"
 #include <algorithm>
@@ -44,8 +46,14 @@ class GameScene : public Scene {
     int ticks;
     int asteroidCooldown;
 
+    Button unpauseButton;
+    Button playAgainButton;
+    Button exitButton;
+
+    void restartGame();
+
   public:
-    GameScene(bool &pop, Scene *&toPush);
+    GameScene(GameProperties &gameProperties);
     void frame() override;
     ~GameScene() override;
 };
